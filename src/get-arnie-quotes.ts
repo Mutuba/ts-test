@@ -7,11 +7,10 @@ type httpGetResponse = {
 type BodyType = {
   message: string;
 }
-
 type TResult = httpGetResponse[];
 
 export const getArnieQuotes = async (urls: string[]): Promise<TResult> => {
-  let result : TResult = [];
+  const result : TResult = [];
   await Promise.all(urls.map(async item => {
     const httpGetResult = await httpGet(item);
     let httpGetResultObject: httpGetResponse = {};
