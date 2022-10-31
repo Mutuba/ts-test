@@ -1,10 +1,28 @@
 import { httpGet } from './mock-http-interface';
 
-// TODO define this type properly
-type TResult = any;
+type httpGetResponse = {
+  [key: string]: string;
+};
 
-export const getArnieQuotes = async (urls : string[]) : Promise<TResult[]> => {
-  // TODO: Implement this function.
-  
-  return [];
+type BodyType = {
+  message: string;
+}
+type TResult = httpGetResponse[];
+
+export const getArnieQuotes = async (urls: string[]): Promise<TResult> => {
+  const result : TResult = [];
+  await Promise.all(urls.map(async item => {
+    const httpGetResult = await httpGet(item);
+    let httpGetResultObject: httpGetResponse = {};
+    const bodyType: BodyType = JSON.parse(httpGetResult.body)
+    if (httpGetResult.status === 200) {
+      httpGetResultObject = { 'Arnie Quote': bodyType.message };
+    }
+    if (httpGetResult.status === 500) {
+      httpGetResultObject = { FAILURE: bodyType.message };
+    }
+    result.push(httpGetResultObject);
+  }));
+
+  return result;
 };

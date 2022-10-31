@@ -22,7 +22,7 @@ export const httpGet = async (url : string) => {
     const message = await httpRequestMockP(url);
     return { status: 200, body: JSON.stringify({ message }) };
   } 
-  catch (err) {
+  catch (err : any) {
     return { status: 500, body: JSON.stringify({ message: err.message }) };
   }
 };
